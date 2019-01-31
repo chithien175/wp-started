@@ -55,4 +55,3 @@ function understrap_child_remove_page_template( $page_templates ) {
 
     return $page_templates;
 }
-
