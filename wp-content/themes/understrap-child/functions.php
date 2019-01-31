@@ -3,6 +3,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
+// Load All Function From INC Folder
+$katiwp_includes = array(
+	'/custom-advanced-custom-fields.php',				// Load Advanced Custom Fields functions.
+	'/google-map-script.php'                          // Load Google Map Script functions.
+);
+
+foreach ( $katiwp_includes as $file ) {
+	$filepath = locate_template( 'inc' . $file );
+	if ( ! $filepath ) {
+		trigger_error( sprintf( 'Error locating /inc%s for inclusion', $file ), E_USER_ERROR );
+	}
+	require_once $filepath;
+}
+
 function understrap_remove_scripts() {
     wp_dequeue_style( 'understrap-styles' );
     wp_deregister_style( 'understrap-styles' );
@@ -28,27 +42,17 @@ function theme_enqueue_styles() {
     }
 }
 
-// AFC Add Option Page
-if( function_exists('acf_add_options_page') ) {
-	
-	acf_add_options_page(array(
-		'page_title' 	=> 'Theme General Settings',
-		'menu_title'	=> 'Theme Settings',
-		'menu_slug' 	=> 'theme-general-settings',
-		'capability'	=> 'edit_posts',
-		'redirect'		=> false
-	));
-	
-	acf_add_options_sub_page(array(
-		'page_title' 	=> 'Theme Header Settings',
-		'menu_title'	=> 'Header',
-		'parent_slug'	=> 'theme-general-settings',
-	));
-	
-	acf_add_options_sub_page(array(
-		'page_title' 	=> 'Theme Footer Settings',
-		'menu_title'	=> 'Footer',
-		'parent_slug'	=> 'theme-general-settings',
-	));
-	
+// Remove Template from Theme Parent
+add_filter( 'theme_page_templates', 'understrap_child_remove_page_template', 30, 3);
+function understrap_child_remove_page_template( $page_templates ) {
+	// Remove the template we don’t need.
+	unset( $page_templates['page-templates/blank.php'] );
+	unset( $page_templates['page-templates/both-sidebarspage.php'] );
+	unset( $page_templates['page-templates/empty.php'] );
+	unset( $page_templates['page-templates/fullwidthpage.php'] );
+	unset( $page_templates['page-templates/left-sidebarpage.php'] );
+	unset( $page_templates['page-templates/right-sidebarpage.php'] );
+
+    return $page_templates;
 }
+

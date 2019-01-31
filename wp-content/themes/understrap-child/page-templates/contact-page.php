@@ -1,6 +1,6 @@
 <?php
 /**
- * Template Name: Contact Page
+ * Template Name: Contact Us Page
  *
  * Template for displaying a page without sidebar even if a sidebar widget is published.
  *
@@ -19,6 +19,7 @@ $container = get_theme_mod( 'understrap_container_type' );
     $contact_banner = get_field('contact_banner');
     $contact_content = get_field('contact_content');
     $contact_sidebar = get_field('contact_sidebar');
+    $contact_map = get_field('contact_map');
 ?>
 
 <div class="breadcumb-area black-opacity" style="background: url(<?php echo $contact_banner['image']; ?>)no-repeat center center / cover;">
@@ -70,26 +71,49 @@ $container = get_theme_mod( 'understrap_container_type' );
             
             <div class="col-md-4">
                 <div id="contact-sidebar">
-                    <h1 class="title"><?php echo $contact_sidebar['title']; ?></h1>
-                    <p class="description"><?php echo $contact_sidebar['description']; ?></p>
-                    <ul>
-                        <li>
-                            <i class="fa fa-phone"></i>
-                            <p><?php echo $contact_sidebar['phone']; ?></p>
-                        </li>
-                        <li>
-                            <i class="fa fa-envelope"></i>
-                            <p><?php echo $contact_sidebar['email']; ?></p>
-                        </li>
-                        <li>
-                            <i class="fa fa-location-arrow"></i>
-                            <p><?php echo $contact_sidebar['address']; ?></p>
-                        </li>
-                    </ul>
+                    <?php while ( have_posts() ) : the_post(); ?>
+
+                        <h1 class="title"><?php echo $contact_sidebar['title']; ?></h1>
+
+                        <p class="description"><?php echo $contact_sidebar['description']; ?></p>
+
+                        <ul>
+                            <li>
+                                <i class="fa fa-phone"></i>
+                                <p><?php echo $contact_sidebar['phone']; ?></p>
+                            </li>
+                            <li>
+                                <i class="fa fa-envelope"></i>
+                                <p><?php echo $contact_sidebar['email']; ?></p>
+                            </li>
+                            <li>
+                                <i class="fa fa-location-arrow"></i>
+                                <p><?php echo $contact_sidebar['address']; ?></p>
+                            </li>
+                        </ul>
+
+                    <?php endwhile; // end of the loop. ?>
+                    
                 </div>
             </div>
 
 		</div><!-- .row end -->
+
+        <!-- Google Map -->
+        <div class="row">
+            <div class="col-md-12">
+                <div id="contact-map">
+
+                    <h1 class="title"><?php echo $contact_map['title']; ?></h1>
+                        
+                    <div class="acf-map">
+
+                        <div class="marker" data-lat="<?php echo $contact_map['google_map']['lat']; ?>" data-lng="<?php echo $contact_map['google_map']['lng']; ?>"></div>
+                    
+                    </div>
+                </div>
+            </div>
+        </div>
 
 	</div><!-- #content -->
 
